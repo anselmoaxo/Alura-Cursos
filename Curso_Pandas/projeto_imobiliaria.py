@@ -78,3 +78,71 @@ df.Tipo.unique()
 df.drop('Tipo', axis=1 , inplace=True)
 
 df.head()
+
+"""#Apartamento que possui um quarto é aluguel menor que R$ 1200,00"""
+
+#Filtrando todos apartamentos que tem 1 Quarto.
+quartos = df['Quartos'] == 1
+df[quartos]
+
+# filtrando todos os Valores menor que R$1200,00
+valores = df['Valor' ] < 1200
+df[valores]
+
+# filtrando Apartamento com 1 quarta e que são menores que R$1200,00
+filtro_final = df[quartos & valores]
+filtro_final
+
+# Armazenando o Resutado em outro DataFrame
+df_01 = filtro_final
+
+"""
+# Apartamentos que tenham 2 quartos , aluguel menor que R$3000,00 e com a area maior que 70"""
+
+selecao = (df['Quartos'] >= 2) & (df['Valor'] < 3000) & (df['Area'] > 70)
+df[selecao]
+
+df02 = df[selecao]
+
+"""# Salvando Dados"""
+
+df.to_csv('dados_apartamento.csv',index=False)
+
+pd.read_csv('dados_apartamento.csv')
+
+df.to_csv('dados_apartamento.csv', index=False, sep=';')
+
+pd.read_csv('dados_apartamento.csv', sep=';')
+
+"""#Analisando dados
+Criando colunas Numericas
+"""
+
+# importando toda a base via url , arquivo csv
+url = 'https://raw.githubusercontent.com/alura-cursos/pandas-conhecendo-a-biblioteca/main/base-de-dados/aluguel.csv'
+df = pd.read_csv(url, sep= ';')
+df.head()
+
+# criando a coluna Valor por mês
+df['valor_mes'] = df['Valor'] + df['Condominio']
+df.head()
+
+# criando coluna valor por Ano
+df['valor_ano'] = df['valor_mes'] * 12 + df['IPTU']
+df.head()
+
+"""# Criando colunas categóricas"""
+
+df['Descricao'] = df['Tipo'] + ' em ' + df['Bairro'] + '  com ' +\
+                  df['Quartos'].astype(str) + ' Quarto(s)  e ' +\
+                  df['Vagas'].astype(str) + ' Vagas'
+df.head()
+
+df['Possui_Suites'] = df['Suites'].apply(lambda x: 'Sim' if x > 0 else 'Não')
+df.head()
+
+"""# Salvando Arquivo modificado para os Devs"""
+
+df.to_csv('dados_completo_dev.csv', index=False , sep=';')
+
+pd.read_csv('dados_completo_dev.csv', sep=';')
